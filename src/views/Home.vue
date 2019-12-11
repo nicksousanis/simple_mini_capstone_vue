@@ -3,19 +3,25 @@
     <h1>{{ message }}</h1>
     <div v-for="product in products">
       <h2>{{ product.name }}</h2>
-      <p>{{ product.description }}</p>
-      <img :src="product.image_url" alt="" />
-      <div>
-        <button>Buy now!</button>
+      <button v-on:click="toggleInfo(product)">Show more info</button>
+      <div v-if="product === currentProduct">
+        <p>{{ product.description }}</p>
+        <img :src="product.image_url" alt="" />
       </div>
+
+      <div></div>
     </div>
     <h2>New product</h2>
     Name
     <input v-model="params.name" type="text" />
     Price
-    <input v-model="params.price" type="text" />
+    <input v-model="params.price" type="number" />
     Description
     <input v-model="params.description" type="text" />
+    Supplier
+    <select name="Supplier" id="">
+      <option v-for="product in products" :value="product.price">{{ product.price }}</option>
+    </select>
     <div>
       <button v-on:click="createProduct">Create</button>
     </div>
@@ -37,8 +43,9 @@ export default {
   data: function() {
     return {
       message: "Welcome to Vue.js!",
-      isActive: true,
+      isActive: false,
       products: [],
+      currentProduct: {},
       params: {
         name: "",
         price: null,
@@ -68,6 +75,13 @@ export default {
           };
         })
         .catch(error => console.log(error.response));
+    },
+    toggleInfo: function(product) {
+      if (this.currentProduct === product) {
+        this.currentProduct = {};
+      } else {
+        this.currentProduct = product;
+      }
     }
   }
 };
